@@ -1,0 +1,10 @@
+﻿/TelegramBot/bin/
+/TelegramBot/obj/
+
+/PersonalBot/bin/
+/PersonalBot/obj/
+
+/Assistant/bin/
+/Assistant/obj/
+
+/Assistant/Resources/settings.json
