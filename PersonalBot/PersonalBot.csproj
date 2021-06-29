@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <AssemblyName>PersonalBot</AssemblyName>
+        <RootNamespace>PersonalBot</RootNamespace>
+        <LangVersion>9</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Telegram.Bot" Version="16.0.0" />
+      <PackageReference Include="Telegram.Bot.Extensions.Polling" Version="0.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TelegramBot\TelegramBot.csproj" />
+    </ItemGroup>
+
+</Project>
