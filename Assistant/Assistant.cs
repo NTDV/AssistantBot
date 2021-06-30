@@ -9,7 +9,7 @@ namespace Assistant
     {
         public static void Main()
         {
-            ISettingsProvider settings = new StaticSettingsProvider("Resources\\settings.json");
+            ISettingsProvider settings = new StaticSettingsProvider("Resources/settings.json");
             
             IBot bot = PersonalBot.PersonalBot.CreateInstance(settings);
             bot.Start();

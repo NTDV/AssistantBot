@@ -14,7 +14,7 @@ namespace PersonalBot.Data.Models
 
         public override string ToString()
         {
-            return $"{Title}\n{Place}\n{Info}";
+            return $"Событие: {Title}\nИнформация о проведении: {Place}\nПодробнее: {Info}\nНапомнить: {Time:f}";
         }
     }
 }
