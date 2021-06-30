@@ -1,20 +1,27 @@
 ﻿using System;
 using System.Threading;
-using PersonalBot.Handlers;
+using PersonalBot.Controllers;
+using PersonalBot.Data;
 using PersonalBot.Resources.Providers.Declarations;
+using PersonalBot.Views;
 using Telegram.Bot;
+using Telegram.Bot.Types;
 using TelegramBot.Declarations;
 using TelegramBot.Exceptions;
+using TelegramBotBase;
 
 namespace PersonalBot
 {
-    public class PersonalBot : IBot
+    public class PersonalBot : IBot, IDisposable
     {
+        public static DbProvider Database { get; private set; }
+        
         private static PersonalBot _instanse;
+        private static NotificationsSender _notificationsSender;
 
-        private ITelegramBotClient _bot;
+        private BotBase<StartForm> _bot;
         private readonly ISettingsProvider _settings;
-        private CancellationTokenSource _cancellationToken;
+
 
         private PersonalBot(ISettingsProvider settingsProvider)
         {
@@ -31,31 +38,55 @@ namespace PersonalBot
         
         public static PersonalBot CreateInstance(ISettingsProvider settingsProvider)
         {
+            Database = new DbProvider(settingsProvider);
             _instanse = new PersonalBot(settingsProvider);
 
             return GetInstance();
         }
 
-        public async void StartAsync()
+        public void Start()
         {
-            if (_cancellationToken is {IsCancellationRequested: false})
+            _notificationsSender?.Stop();
+            _bot?.Stop();
+            
+            _bot = new BotBase<StartForm>(_settings["api_token"]);
+
+            _bot.BotCommands.Add(new BotCommand { Command = "start", Description = "Запуск бота" });
+            _bot.BotCommands.Add(new BotCommand { Command = "home", Description = "Главное меню" });
+
+            _bot.BotCommand += async (_, botArgs) =>
             {
-                throw new BotAlreadyStartedException(this);
-            }
+                switch (botArgs.Command)
+                {
+                    case "start":
+                    case "home":
+                        await botArgs.Device.ActiveForm.NavigateTo(new StartForm());
+                        break;
+                    
+                    default:
+                        return;
+                }
+            };
             
-            _bot = new TelegramBotClient(_settings["api_token"]);
-
-            var me = await _bot.GetMeAsync();
-            Console.Title = me.Username;
-
-            _cancellationToken = new CancellationTokenSource();
+            _bot.UploadBotCommands().Wait();
             
-            _bot.StartReceiving(new UpdatingHandler(), _cancellationToken.Token);
+            _notificationsSender = new NotificationsSender(_bot);
+            _notificationsSender.Start();
+            
+            _bot.Start();
         }
 
         public void Stop()
         {
-            _cancellationToken.Cancel();
+            _notificationsSender?.Stop();
+            _notificationsSender = null;
+            
+            _bot?.Stop();
+        }
+
+        public void Dispose()
+        {
+            Stop();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace TelegramBot.Declarations
             throw new NotImplementedException($"{nameof(IBot)} must implement singleton pattern.");
         }
         
-        public void StartAsync();
+        public void Start();
         public void Stop();
     }
 }

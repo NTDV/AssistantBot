@@ -8,12 +8,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Telegram.Bot" Version="16.0.0" />
-      <PackageReference Include="Telegram.Bot.Extensions.Polling" Version="0.2.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.7" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.7" />
+      <PackageReference Include="TelegramBotBase" Version="3.3.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\TelegramBot\TelegramBot.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Handlers" />
     </ItemGroup>
 
 </Project>

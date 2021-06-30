@@ -12,7 +12,7 @@ namespace Assistant
             ISettingsProvider settings = new StaticSettingsProvider("Resources\\settings.json");
             
             IBot bot = PersonalBot.PersonalBot.CreateInstance(settings);
-            bot.StartAsync();
+            bot.Start();
             
             Console.ReadLine();
             bot.Stop();
