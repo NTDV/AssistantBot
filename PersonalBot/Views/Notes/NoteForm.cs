@@ -3,7 +3,7 @@ using PersonalBot.Data.Models;
 using TelegramBotBase.Base;
 using TelegramBotBase.Form;
 
-namespace PersonalBot.Views
+namespace PersonalBot.Views.Notes
 {
     public class NoteForm : AutoCleanForm
     {

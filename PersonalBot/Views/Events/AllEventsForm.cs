@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using TelegramBotBase.Base;
 using TelegramBotBase.Form;
 
-namespace PersonalBot.Views
+namespace PersonalBot.Views.Events
 {
     public class AllEventsForm : AutoCleanForm
     {

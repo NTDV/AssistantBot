@@ -1,17 +1,12 @@
-﻿using System;
-using System.Globalization;
-using System.Threading.Tasks;
-using PersonalBot.Controllers;
+﻿using System.Threading.Tasks;
 using PersonalBot.Data.Models;
-using PersonalBot.Views.Components;
-using TelegramBotBase.Args;
 using TelegramBotBase.Base;
-using TelegramBotBase.Controls.Inline;
 using TelegramBotBase.Enums;
 using TelegramBotBase.Form;
+
 #pragma warning disable 1998
 
-namespace PersonalBot.Views
+namespace PersonalBot.Views.Notes
 {
     public class NewNoteForm : AutoCleanForm
     {

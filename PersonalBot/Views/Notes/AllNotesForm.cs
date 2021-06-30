@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using TelegramBotBase.Base;
 using TelegramBotBase.Form;
 
-namespace PersonalBot.Views
+namespace PersonalBot.Views.Notes
 {
     public class AllNotesForm : AutoCleanForm
     {
@@ -38,7 +38,7 @@ namespace PersonalBot.Views
                 ButtonForm edit = new ButtonForm();
                 edit.AddButtonRow(new ButtonBase("Подробнее", new CallbackData("a", $"look-{note.Id}").Serialize()));
                 
-                await Device.Send(note.ToString(), edit);
+                await Device.Send(note.Title, edit);
             }
 
             var form = new ButtonForm();

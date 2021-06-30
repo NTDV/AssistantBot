@@ -1,10 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using PersonalBot.Controllers;
+﻿using System.Threading.Tasks;
 using TelegramBotBase.Base;
 using TelegramBotBase.Form;
 
-namespace PersonalBot.Views
+namespace PersonalBot.Views.Notes
 {
     public class NotesMenuForm : AutoCleanForm
     {

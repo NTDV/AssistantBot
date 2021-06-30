@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Threading;
 using PersonalBot.Controllers;
 using PersonalBot.Data;
 using PersonalBot.Resources.Providers.Declarations;
 using PersonalBot.Views;
-using Telegram.Bot;
 using Telegram.Bot.Types;
 using TelegramBot.Declarations;
 using TelegramBot.Exceptions;
@@ -15,17 +13,17 @@ namespace PersonalBot
     public class PersonalBot : IBot, IDisposable
     {
         public static DbProvider Database { get; private set; }
+        public static ISettingsProvider Settings { get; private set; }
         
         private static PersonalBot _instanse;
         private static NotificationsSender _notificationsSender;
 
         private BotBase<StartForm> _bot;
-        private readonly ISettingsProvider _settings;
 
 
         private PersonalBot(ISettingsProvider settingsProvider)
         {
-            _settings = settingsProvider;
+            Settings = settingsProvider;
         }
 
         public static PersonalBot GetInstance()
@@ -49,25 +47,11 @@ namespace PersonalBot
             _notificationsSender?.Stop();
             _bot?.Stop();
             
-            _bot = new BotBase<StartForm>(_settings["api_token"]);
+            _bot = new BotBase<StartForm>(Settings["api_token"]);
 
             _bot.BotCommands.Add(new BotCommand { Command = "start", Description = "Запуск бота" });
             _bot.BotCommands.Add(new BotCommand { Command = "home", Description = "Главное меню" });
 
-            _bot.BotCommand += async (_, botArgs) =>
-            {
-                switch (botArgs.Command)
-                {
-                    case "start":
-                    case "home":
-                        await botArgs.Device.ActiveForm.NavigateTo(new StartForm());
-                        break;
-                    
-                    default:
-                        return;
-                }
-            };
-            
             _bot.UploadBotCommands().Wait();
             
             _notificationsSender = new NotificationsSender(_bot);
