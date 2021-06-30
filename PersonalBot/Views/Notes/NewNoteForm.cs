@@ -65,18 +65,18 @@ namespace PersonalBot.Views.Notes
         {
             if (Title == null)
             {
-                await Device.Send("Укажите заголовок: ");
+                await Device.Send("📍 Укажите заголовок: ");
                 return;
             }
             if (Description == null)
             {
-                await Device.Send("Укажите дополнительную информацию: ");
+                await Device.Send("➕ Укажите дополнительную информацию: ");
                 return;
             }
 
             var buttons = new ButtonForm();
-            buttons.AddButtonRow(new ButtonBase("Отмена", new CallbackData("a", "cancel").Serialize()));
-            buttons.AddButtonRow(new ButtonBase("Создать", new CallbackData("a", "create").Serialize()));
+            buttons.AddButtonRow(new ButtonBase("❌ Отмена", new CallbackData("a", "cancel").Serialize()));
+            buttons.AddButtonRow(new ButtonBase("✅ Создать", new CallbackData("a", "create").Serialize()));
 
             var ret = $"Заголовок: {Title}\nПодробнее: {Description}";
             

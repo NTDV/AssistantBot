@@ -36,15 +36,15 @@ namespace PersonalBot.Views.Notes
             foreach (var note in notes)
             {
                 ButtonForm edit = new ButtonForm();
-                edit.AddButtonRow(new ButtonBase("Подробнее", new CallbackData("a", $"look-{note.Id}").Serialize()));
+                edit.AddButtonRow(new ButtonBase("⬆️ Подробнее", new CallbackData("a", $"look-{note.Id}").Serialize()));
                 
                 await Device.Send(note.Title, edit);
             }
 
             var form = new ButtonForm();
-            form.AddButtonRow(new ButtonBase("Назад", new CallbackData("a", "back").Serialize()));
+            form.AddButtonRow(new ButtonBase("◀️ Назад", new CallbackData("a", "back").Serialize()));
 
-            await Device.Send($"Всего заметок: {notes.Length}", form);
+            await Device.Send($"📝 Всего заметок: {notes.Length}", form);
         }
     }
 }

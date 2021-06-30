@@ -35,12 +35,12 @@ namespace PersonalBot.Views.Events
         {
             ButtonForm form = new ButtonForm();
 
-            form.AddButtonRow(new ButtonBase("Добавить", new CallbackData("a", "add").Serialize()));
+            form.AddButtonRow(new ButtonBase("🆕 Добавить", new CallbackData("a", "add").Serialize()));
             form.AddButtonRow(
-                new ButtonBase("Назад", new CallbackData("a", "back").Serialize()),
-                new ButtonBase("Все", new CallbackData("a", "all").Serialize()));
+                new ButtonBase("◀️ Назад", new CallbackData("a", "back").Serialize()),
+                new ButtonBase("⏳ Все", new CallbackData("a", "all").Serialize()));
 
-            await Device.Send("Управление напоминаниями", form);
+            await Device.Send("⚙️ Управление напоминаниями", form);
         }
     }
 }

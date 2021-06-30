@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using PersonalBot.Controllers;
 using TelegramBotBase.Base;
 using TelegramBotBase.Enums;
@@ -17,7 +16,7 @@ namespace PersonalBot.Views.Weather
             _weather = new WeatherProvider(PersonalBot.Settings);
             
             Init += async (_,_) => 
-                await Device.RequestLocation("Местоположение", "Получите прогноз погоды для вашей местности");
+                await Device.RequestLocation("Моё местоположение", "Запрос на отправку местоположения нужен, чтобы показать прогноз погоды для вашей местности");
             
             Closed += async (_,_) => 
                 await Device.HideReplyKeyboard();
@@ -34,7 +33,6 @@ namespace PersonalBot.Views.Weather
 
         public override async Task Action(MessageResult message)
         {
-            Console.WriteLine(message.Command);
             var call = message.GetData<CallbackData>();
             await message.ConfirmAction();
 
@@ -62,7 +60,7 @@ namespace PersonalBot.Views.Weather
             }
             
             ButtonForm form = new ButtonForm();
-            form.AddButtonRow(new ButtonBase("Назад", new CallbackData("a", "back").Serialize()));
+            form.AddButtonRow(new ButtonBase("◀️ Назад", new CallbackData("a", "back").Serialize()));
 
             await Device.Send("Для получения прогноза погоды отправьте название города или своё местоположение", form);
         }

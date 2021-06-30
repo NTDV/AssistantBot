@@ -91,29 +91,29 @@ namespace PersonalBot.Views.Events
         {
             if (Title == null)
             {
-                await Device.Send("Укажите заголовок: ");
+                await Device.Send("📍 Укажите заголовок: ");
                 return;
             }
 
             if (Place == null)
             {
-                await Device.Send("Укажите информацию о месте и времени: ");
+                await Device.Send("🎫 Укажите информацию о месте и времени: ");
                 return;
             }
             if (Info == null)
             {
-                await Device.Send("Укажите дополнительную информацию: ");
+                await Device.Send("➕ Укажите дополнительную информацию: ");
                 return;
             }
             if (Time == null)
             {
-                await Device.Send("Укажите время: ");
+                await Device.Send("🕜 Укажите время: ");
                 return;
             }
 
             var buttons = new ButtonForm();
-            buttons.AddButtonRow(new ButtonBase("Отмена", new CallbackData("a", "cancel").Serialize()));
-            buttons.AddButtonRow(new ButtonBase("Создать", new CallbackData("a", "create").Serialize()));
+            buttons.AddButtonRow(new ButtonBase("❌ Отмена", new CallbackData("a", "cancel").Serialize()));
+            buttons.AddButtonRow(new ButtonBase("✅ Создать", new CallbackData("a", "create").Serialize()));
 
             var ret = $"Заголовок: {Title}\nМесто и время: {Place}\nДата уведомления: {DatePicker.SelectedDate.Add(_time):F}\nПодробнее: {Info}";
             

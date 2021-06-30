@@ -1,21 +1,11 @@
 ﻿using System.Threading.Tasks;
-using PersonalBot.Controllers;
 using TelegramBotBase.Base;
-using TelegramBotBase.Enums;
 using TelegramBotBase.Form;
 
-namespace PersonalBot.Views.Covid
+namespace PersonalBot.Views.About
 {
-    public class CovidForm : AutoCleanForm
+    public class AboutForm : AutoCleanForm
     {
-        private readonly CovidProvider _covid;
-        
-        public CovidForm()
-        {
-            DeleteMode = eDeleteMode.OnLeavingForm;
-            _covid = new CovidProvider(PersonalBot.Settings);
-        }
-
         public override async Task Action(MessageResult message)
         {
             var call = message.GetData<CallbackData>();
@@ -37,12 +27,10 @@ namespace PersonalBot.Views.Covid
 
         public override async Task Render(MessageResult message)
         {
-            await Device.Send(await _covid.GetStatistic(null));
-            
             ButtonForm form = new ButtonForm();
             form.AddButtonRow(new ButtonBase("◀️ Назад", new CallbackData("a", "back").Serialize()));
 
-            await Device.Send("☣️ Самое важное, что можно сделать, чтобы защитить себя, — это поддерживать чистоту рук и поверхностей. Конечно, не стоит забывать и про ношение маски!", form);
+            await Device.Send("⭐️ Что умеет бот?\n- Создавать, удалять, просматривать заметки\n- Создавать, просматривать и получать напоминания\n- Предоставлять сводку о погоде в разных уголках света\n- Выводить актуальную информацию о Covid-19 в России\n- Делать вашу жизнь проще ;)\n\nGitHub проекта - https://github.com/NTDV/AssistantBot", form);
         }
     }
 }

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PersonalBot.Resources.Providers.Declarations;
 using Telegram.Bot.Types;
@@ -21,7 +18,6 @@ namespace PersonalBot.Controllers
 
         private async Task<string> CallApi(string url)
         {
-            Console.WriteLine(url);
             var client = new HttpClient();
             var content = await client.GetStringAsync(url);
             dynamic json = JObject.Parse(content);

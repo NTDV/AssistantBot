@@ -42,8 +42,8 @@ namespace PersonalBot.Views.Notes
             ButtonForm form = new ButtonForm();
 
             form.AddButtonRow(
-                new ButtonBase("Вернуться", new CallbackData("a", "back").Serialize()),
-                new ButtonBase("Удалить", new CallbackData("a", "delete").Serialize()));
+                new ButtonBase("◀️ Назад", new CallbackData("a", "back").Serialize()),
+                new ButtonBase("🗑 Удалить", new CallbackData("a", "delete").Serialize()));
 
             await Device.Send(_note.ToString(), form);
         }

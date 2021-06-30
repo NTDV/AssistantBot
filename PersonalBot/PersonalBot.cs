@@ -3,7 +3,6 @@ using PersonalBot.Controllers;
 using PersonalBot.Data;
 using PersonalBot.Resources.Providers.Declarations;
 using PersonalBot.Views;
-using Telegram.Bot.Types;
 using TelegramBot.Declarations;
 using TelegramBot.Exceptions;
 using TelegramBotBase;
@@ -48,11 +47,6 @@ namespace PersonalBot
             _bot?.Stop();
             
             _bot = new BotBase<StartForm>(Settings["api_token"]);
-
-            _bot.BotCommands.Add(new BotCommand { Command = "start", Description = "Запуск бота" });
-            _bot.BotCommands.Add(new BotCommand { Command = "home", Description = "Главное меню" });
-
-            _bot.UploadBotCommands().Wait();
             
             _notificationsSender = new NotificationsSender(_bot);
             _notificationsSender.Start();

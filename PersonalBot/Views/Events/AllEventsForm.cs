@@ -36,15 +36,15 @@ namespace PersonalBot.Views.Events
             foreach (var @event in events)
             {
                 ButtonForm edit = new ButtonForm();
-                edit.AddButtonRow(new ButtonBase("Подробнее", new CallbackData("a", $"look-{@event.Id}").Serialize()));
+                edit.AddButtonRow(new ButtonBase("⬆️ Подробнее", new CallbackData("a", $"look-{@event.Id}").Serialize()));
 
                 await Device.Send(@event.ToString(), edit);
             }
 
             var form = new ButtonForm();
-            form.AddButtonRow(new ButtonBase("Назад", new CallbackData("a", "back").Serialize()));
+            form.AddButtonRow(new ButtonBase("◀️ Назад", new CallbackData("a", "back").Serialize()));
 
-            await Device.Send($"Всего напоминаний: {events.Length}", form);
+            await Device.Send($"🕜 Всего напоминаний: {events.Length}", form);
         }
     }
 }

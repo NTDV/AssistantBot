@@ -23,7 +23,7 @@ namespace PersonalBot.Controllers
             {
                 try
                 {
-                    await bot.Client.TelegramClient.SendTextMessageAsync(@event.ChatId, @event.ToString());
+                    await bot.Client.TelegramClient.SendTextMessageAsync(@event.ChatId, "❗️Напоминание\n" + @event);
                 }
                 catch (Exception)
                 {
