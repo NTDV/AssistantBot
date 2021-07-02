@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using PersonalBot.Data.Models;
 using PersonalBot.Resources.Providers.Declarations;
@@ -22,8 +23,15 @@ namespace PersonalBot.Data
 
         public Event[] GetNotifyingEvents()
         {
-            var now = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow,
-                TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time"));
+            TimeZoneInfo moscowTimezone;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                moscowTimezone = TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time");
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                moscowTimezone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Moscow");
+            else
+                throw new PlatformNotSupportedException("Because of different timezones declarations we supports onli Linux and Windows now.");
+            
+            var now = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, moscowTimezone);
             
             var events = _db.Events.ToArray().Where(e => e.Time <= now).ToArray();
             _db.Events.RemoveRange(events);
