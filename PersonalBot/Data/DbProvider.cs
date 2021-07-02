@@ -15,14 +15,16 @@ namespace PersonalBot.Data
             _db = new MainDbContext(settingsProvider);
         }
         
-        public Event[] GetAllEvents()
+        public Event[] GetAllEvents(long ownerId)
         {
-            return _db.Events.ToArray();
+            return _db.Events.Where(e => e.ChatId == ownerId).ToArray();
         }
 
         public Event[] GetNotifyingEvents()
         {
-            var now = DateTime.Now;
+            var now = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow,
+                TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time"));
+            
             var events = _db.Events.ToArray().Where(e => e.Time <= now).ToArray();
             _db.Events.RemoveRange(events);
             _db.SaveChangesAsync();
@@ -51,9 +53,9 @@ namespace PersonalBot.Data
             return await _db.SaveChangesAsync();
         }
         
-        public Note[] GetAllNotes()
+        public Note[] GetAllNotes(long ownerId)
         {
-            return _db.Notes.ToArray();
+            return _db.Notes.Where(e => e.ChatId == ownerId).ToArray();
         }
 
         public Note GetNote(long id)

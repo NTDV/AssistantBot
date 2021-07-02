@@ -32,7 +32,7 @@ namespace PersonalBot.Views.Notes
 
         public override async Task Render(MessageResult message)
         {
-            var notes = PersonalBot.Database.GetAllNotes();
+            var notes = PersonalBot.Database.GetAllNotes(Device.DeviceId);
             foreach (var note in notes)
             {
                 ButtonForm edit = new ButtonForm();

@@ -32,7 +32,7 @@ namespace PersonalBot.Views.Events
 
         public override async Task Render(MessageResult message)
         {
-            var events = PersonalBot.Database.GetAllEvents();
+            var events = PersonalBot.Database.GetAllEvents(Device.DeviceId);
             foreach (var @event in events)
             {
                 ButtonForm edit = new ButtonForm();
