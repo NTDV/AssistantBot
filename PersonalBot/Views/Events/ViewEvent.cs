@@ -5,11 +5,11 @@ using TelegramBotBase.Form;
 
 namespace PersonalBot.Views.Events
 {
-    public class EventForm : AutoCleanForm
+    public class ViewEvent : AutoCleanForm
     {
-        private Event _event;
+        private readonly Event _event;
         
-        public EventForm(Event @event)
+        public ViewEvent(Event @event)
         {
             _event = @event;
         }
@@ -24,12 +24,15 @@ namespace PersonalBot.Views.Events
 
             switch (call.Value)
             {
+                case "edit":
+                    await NavigateTo(new EditEvent(_event));
+                    break;
                 case "delete":
                     await PersonalBot.Database.RemoveEvent(_event);
-                    await NavigateTo(new EventsMenuForm());
+                    await NavigateTo(new EventsMenu());
                     break;
                 case "back":
-                    await NavigateTo(new EventsMenuForm());
+                    await NavigateTo(new EventsMenu());
                     break;
                 default:
                     return;
@@ -43,7 +46,8 @@ namespace PersonalBot.Views.Events
 
             form.AddButtonRow(
                 new ButtonBase("◀️Назад", new CallbackData("a", "back").Serialize()),
-                new ButtonBase("🗑️ Удалить", new CallbackData("a", "delete").Serialize()));
+                new ButtonBase("🗑️ Удалить", new CallbackData("a", "delete").Serialize()),
+                new ButtonBase("Изменить", new CallbackData("a", "edit").Serialize()));
 
             await Device.Send(_event.ToString(), form);
         }

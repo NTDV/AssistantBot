@@ -4,7 +4,7 @@ using TelegramBotBase.Form;
 
 namespace PersonalBot.Views.About
 {
-    public class AboutForm : AutoCleanForm
+    public class About : AutoCleanForm
     {
         public override async Task Action(MessageResult message)
         {
@@ -17,7 +17,7 @@ namespace PersonalBot.Views.About
             switch (call.Value)
             {
                 case "back":
-                    await NavigateTo(new StartForm());
+                    await NavigateTo(new Start());
                     break;
                 
                 default:

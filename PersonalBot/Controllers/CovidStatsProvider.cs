@@ -6,11 +6,11 @@ using PersonalBot.Resources.Providers.Declarations;
 
 namespace PersonalBot.Controllers
 {
-    public class CovidProvider
+    public class CovidStatsProvider
     {
         private readonly ISettingsProvider _settings;
 
-        public CovidProvider(ISettingsProvider settingsProvider)
+        public CovidStatsProvider(ISettingsProvider settingsProvider)
         {
             _settings = settingsProvider;
         }

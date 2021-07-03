@@ -6,14 +6,14 @@ using TelegramBotBase.Form;
 
 namespace PersonalBot.Views.Covid
 {
-    public class CovidForm : AutoCleanForm
+    public class Covid : AutoCleanForm
     {
-        private readonly CovidProvider _covid;
+        private readonly CovidStatsProvider _covidStats;
         
-        public CovidForm()
+        public Covid()
         {
             DeleteMode = eDeleteMode.OnLeavingForm;
-            _covid = new CovidProvider(PersonalBot.Settings);
+            _covidStats = new CovidStatsProvider(PersonalBot.Settings);
         }
 
         public override async Task Action(MessageResult message)
@@ -27,7 +27,7 @@ namespace PersonalBot.Views.Covid
             switch (call.Value)
             {
                 case "back":
-                    await NavigateTo(new StartForm());
+                    await NavigateTo(new Start());
                     break;
                 
                 default:
@@ -37,7 +37,7 @@ namespace PersonalBot.Views.Covid
 
         public override async Task Render(MessageResult message)
         {
-            await Device.Send(await _covid.GetStatistic(null));
+            await Device.Send(await _covidStats.GetStatistic(null));
             
             ButtonForm form = new ButtonForm();
             form.AddButtonRow(new ButtonBase("◀️ Назад", new CallbackData("a", "back").Serialize()));

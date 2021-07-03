@@ -9,9 +9,9 @@ using TelegramBotBase.Form;
 
 namespace PersonalBot.Views
 {
-    public class StartForm : AutoCleanForm
+    public class Start : AutoCleanForm
     {
-        public StartForm()
+        public Start()
         {
             Closed += async (_,_) => await Device.HideReplyKeyboard();
         }
@@ -27,19 +27,19 @@ namespace PersonalBot.Views
             switch (call.Value)
             {
                 case "corona":
-                    await NavigateTo(new CovidForm());
+                    await NavigateTo(new Covid.Covid());
                     return;
                 case "notes":
-                    await NavigateTo(new NotesMenuForm());
+                    await NavigateTo(new NotesMenu());
                     break;
                 case "about":
-                    await NavigateTo(new AboutForm());
+                    await NavigateTo(new About.About());
                     break;
                 case "weather":
-                    await NavigateTo(new WeatherForm());
+                    await NavigateTo(new Weather.Weather());
                     return;
                 case "events":
-                    await NavigateTo(new EventsMenuForm());
+                    await NavigateTo(new EventsMenu());
                     break;
                 default:
                     return;

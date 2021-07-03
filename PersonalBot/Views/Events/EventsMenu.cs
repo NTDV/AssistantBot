@@ -2,9 +2,9 @@
 using TelegramBotBase.Base;
 using TelegramBotBase.Form;
 
-namespace PersonalBot.Views.Notes
+namespace PersonalBot.Views.Events
 {
-    public class NotesMenuForm : AutoCleanForm
+    public class EventsMenu : AutoCleanForm
     {
         public override async Task Action(MessageResult message)
         {
@@ -17,13 +17,13 @@ namespace PersonalBot.Views.Notes
             switch (call.Value)
             {
                 case "add":
-                    await NavigateTo(new NewNoteForm());
+                    await NavigateTo(new CreateEvent());
                     break;
                 case "back":
-                    await NavigateTo(new StartForm());
+                    await NavigateTo(new Start());
                     break;
                 case "all":
-                    await NavigateTo(new AllNotesForm());
+                    await NavigateTo(new AllUserEvents());
                     break;
                 
                 default:
@@ -40,7 +40,7 @@ namespace PersonalBot.Views.Notes
                 new ButtonBase("◀️ Назад", new CallbackData("a", "back").Serialize()),
                 new ButtonBase("⏳ Все", new CallbackData("a", "all").Serialize()));
 
-            await Device.Send("⚙️ Управление заметками", form);
+            await Device.Send("⚙️ Управление напоминаниями", form);
         }
     }
 }

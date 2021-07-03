@@ -6,14 +6,14 @@ using TelegramBotBase.Form;
 
 namespace PersonalBot.Views.Weather
 {
-    public class WeatherForm : AutoCleanForm
+    public class Weather : AutoCleanForm
     {
-        private readonly WeatherProvider _weather;
+        private readonly CurrentWeatherProvider _currentWeather;
         
-        public WeatherForm()
+        public Weather()
         {
             DeleteMode = eDeleteMode.OnLeavingForm;
-            _weather = new WeatherProvider(PersonalBot.Settings);
+            _currentWeather = new CurrentWeatherProvider(PersonalBot.Settings);
             
             Init += async (_,_) => 
                 await Device.RequestLocation("Моё местоположение", "Запрос на отправку местоположения нужен, чтобы показать прогноз погоды для вашей местности");
@@ -26,7 +26,7 @@ namespace PersonalBot.Views.Weather
         {
             if (message.Location != null)
             {
-                var weather = await _weather.GetWeather(message.Location);
+                var weather = await _currentWeather.GetWeather(message.Location);
                 await Device.Send(weather);
             }
         }
@@ -42,7 +42,7 @@ namespace PersonalBot.Views.Weather
             switch (call.Value)
             {
                 case "back":
-                    await NavigateTo(new StartForm());
+                    await NavigateTo(new Start());
                     break;
                 
                 default:
@@ -55,7 +55,7 @@ namespace PersonalBot.Views.Weather
             var city = message.MessageText?.Trim() ?? "";
             if (city != "")
             {
-                var weather = await _weather.GetWeather(city);
+                var weather = await _currentWeather.GetWeather(city);
                 await Device.Send(weather);
             }
             

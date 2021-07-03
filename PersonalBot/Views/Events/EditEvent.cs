@@ -7,62 +7,59 @@ using TelegramBotBase.Base;
 using TelegramBotBase.Enums;
 using TelegramBotBase.Form;
 
-#pragma warning disable 1998
-
 namespace PersonalBot.Views.Events
 {
-    public class NewEventForm : AutoCleanForm
+    public class EditEvent : AutoCleanForm
     {
-        public Event Event => new()
-            {ChatId = Device.DeviceId, Title = Title, Place = Place, Time = DatePicker.SelectedDate.Add(_time), Info = Info};
+        private readonly Event _edited = new();
+        private readonly Event _old;
+
+        private readonly SafeCalendarPicker _datePicker = new () {Title = "Укажите дату события" };
+        private TimeSpan? _time;
+        private int? _renderMessageId;
         
-        private SafeCalendarPicker DatePicker { get; set; }
-        private string Time { get; set; }
-        private string Title { get; set; }
-        private string Place { get; set; }
-        private string Info { get; set; }
-        private int? RenderMessageId { get; set; }
-
-        private TimeSpan _time;
-
-        public NewEventForm()
+        public EditEvent(Event old)
         {
             DeleteMode = eDeleteMode.OnLeavingForm;
+
+            _old = old;
+
+            Init += async (_, _) => await Device.Send(
+                $"Редактирование напоминания\nЗаголовок: {_old.Title}\nМесто и время: {_old.Place}\nДата уведомления: {_old.Time:F}\nПодробнее: {_old.Info}");
         }
 
         public override async Task Load(MessageResult message)
         {
-            if (Title == null)
+            if (_edited.Title == null)
             {
-                if (message.MessageText.Trim() == "")
+                if (string.IsNullOrWhiteSpace(message.MessageText))
                     return;
-                
-                Title = message.MessageText;
+
+                _edited.Title = message.MessageText;
                 return;
             }
 
-            if (Place == null)
+            if (_edited.Place == null)
             {
-                Place = message.MessageText;
+                _edited.Place = message.MessageText;
                 return;
             }
-            if (Info == null)
+
+            if (_edited.Info == null)
             {
-                Info = message.MessageText;
+                _edited.Info = message.MessageText;
                 return;
             }
-            if (Time == null)
+
+            if (_time == null)
             {
                 if (!TimeSpan.TryParseExact(message.MessageText, new[] {"h\\:m", "h\\:mm", "hh\\:m", "hh\\:mm"},
-                    CultureInfo.InvariantCulture, out _time)) 
+                    CultureInfo.InvariantCulture, out var time))
                     return;
-                
-                
-                Time = message.MessageText;
-                DatePicker = new SafeCalendarPicker {Title = "Укажите дату события" };
-                AddControl(DatePicker);
+
+                _time = time;
+                AddControl(_datePicker);
             }
-            
         }
 
         public override async Task Action(MessageResult message)
@@ -75,12 +72,12 @@ namespace PersonalBot.Views.Events
 
             switch (call.Value)
             {
-                case "create":
-                    await PersonalBot.Database.AddEventAsync(Event);
-                    await NavigateTo(new EventsMenuForm());
+                case "confirm":
+                    await PersonalBot.Database.EditEvent(_old, _edited);
+                    await NavigateTo(new EventsMenu());
                     break;
                 case "back":
-                    await NavigateTo(new EventsMenuForm());
+                    await NavigateTo(new EventsMenu());
                     break;
                 default:
                     return;
@@ -89,42 +86,46 @@ namespace PersonalBot.Views.Events
 
         public override async Task Render(MessageResult message)
         {
-            if (Title == null)
+            if (_edited.Title == null)
             {
                 await Device.Send("📍 Укажите заголовок: ");
                 return;
             }
 
-            if (Place == null)
+            if (_edited.Place == null)
             {
                 await Device.Send("🎫 Укажите информацию о месте и времени: ");
                 return;
             }
-            if (Info == null)
+            
+            if (_edited.Info == null)
             {
                 await Device.Send("➕ Укажите дополнительную информацию: ");
                 return;
             }
-            if (Time == null)
+            
+            if (_time == null)
             {
                 await Device.Send("🕜 Укажите время: ");
                 return;
             }
 
+            _edited.Time = _datePicker.SelectedDate.Add(_time.Value);
+
             var buttons = new ButtonForm();
             buttons.AddButtonRow(new ButtonBase("❌ Отмена", new CallbackData("a", "cancel").Serialize()));
-            buttons.AddButtonRow(new ButtonBase("✅ Создать", new CallbackData("a", "create").Serialize()));
+            buttons.AddButtonRow(new ButtonBase("✅ Изменить", new CallbackData("a", "confirm").Serialize()));
 
-            var ret = $"Заголовок: {Title}\nМесто и время: {Place}\nДата уведомления: {DatePicker.SelectedDate.Add(_time):F}\nПодробнее: {Info}";
+            var ret = $"Заголовок: {_edited.Title}\nМесто и время: {_edited.Place}\nДата уведомления: {_edited.Time:F}\nПодробнее: {_edited.Info}";
             
-            if (RenderMessageId != null)
+            if (_renderMessageId != null)
             {
-                await Device.Edit(RenderMessageId.Value, ret, buttons);
+                await Device.Edit(_renderMessageId.Value, ret, buttons);
             }
             else
             {
                 var m = await Device.Send(ret, buttons);
-                RenderMessageId = m.MessageId;
+                _renderMessageId = m.MessageId;
             }
         }
     }

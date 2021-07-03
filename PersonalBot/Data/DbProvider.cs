@@ -44,9 +44,33 @@ namespace PersonalBot.Data
             return await _db.SaveChangesAsync();
         }
         
-        public Event GetEvent(long id)
+        public async Task<Event> GetEvent(long id)
         {
-            return _db.Events.Find(id);
+            return await _db.Events.FindAsync(id);
+        }
+
+        public async Task<int> EditEvent(long id, Event @new)
+        {
+            var old = await GetEvent(id);
+
+            if (old?.IsContentEquals(@new) ?? true) 
+                return 0;
+            
+            _db.Entry(old).CurrentValues.SetValues(@new);
+            return await _db.SaveChangesAsync();
+        }
+        
+        public async Task<int> EditEvent(Event old, Event @new)
+        {
+            if (old?.IsContentEquals(@new) ?? true) 
+                return 0;
+
+            old.Title = @new.Title;
+            old.Place = @new.Place;
+            old.Info = @new.Info;
+            old.Time = @new.Time;
+            
+            return await _db.SaveChangesAsync();
         }
         
         public async Task<int> RemoveEvent(Event @event)
@@ -66,11 +90,22 @@ namespace PersonalBot.Data
             return _db.Notes.Where(e => e.ChatId == ownerId).ToArray();
         }
 
-        public Note GetNote(long id)
+        public async Task<Note> GetNote(long id)
         {
-            return _db.Notes.Find(id);
+            return await _db.Notes.FindAsync(id);
         }
 
+        public async Task<int> EditNote(Note old, Note @new)
+        {
+            if (old?.IsContentEquals(@new) ?? true) 
+                return 0;
+            
+            old.Title = @new.Title;
+            old.Description = @new.Description;
+            
+            return await _db.SaveChangesAsync();
+        }
+        
         public async Task<int> RemoveNote(Note note)
         {
             _db.Notes.Remove(note);

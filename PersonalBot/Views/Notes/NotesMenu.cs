@@ -1,21 +1,13 @@
 ﻿using System.Threading.Tasks;
-using PersonalBot.Data.Models;
 using TelegramBotBase.Base;
 using TelegramBotBase.Form;
 
 namespace PersonalBot.Views.Notes
 {
-    public class NoteForm : AutoCleanForm
+    public class NotesMenu : AutoCleanForm
     {
-        private Note _note;
-        
-        public NoteForm(Note note)
-        {
-            _note = note;
-        }
-        
         public override async Task Action(MessageResult message)
-        { 
+        {
             var call = message.GetData<CallbackData>();
             await message.ConfirmAction();
 
@@ -24,28 +16,31 @@ namespace PersonalBot.Views.Notes
 
             switch (call.Value)
             {
-                case "delete":
-                    await PersonalBot.Database.RemoveNote(_note);
-                    await NavigateTo(new NotesMenuForm());
+                case "add":
+                    await NavigateTo(new NewNote());
                     break;
                 case "back":
-                    await NavigateTo(new NotesMenuForm());
+                    await NavigateTo(new Start());
                     break;
+                case "all":
+                    await NavigateTo(new AllUserNotes());
+                    break;
+                
                 default:
                     return;
             }
         }
 
-
         public override async Task Render(MessageResult message)
         {
             ButtonForm form = new ButtonForm();
 
+            form.AddButtonRow(new ButtonBase("🆕 Добавить", new CallbackData("a", "add").Serialize()));
             form.AddButtonRow(
                 new ButtonBase("◀️ Назад", new CallbackData("a", "back").Serialize()),
-                new ButtonBase("🗑 Удалить", new CallbackData("a", "delete").Serialize()));
+                new ButtonBase("⏳ Все", new CallbackData("a", "all").Serialize()));
 
-            await Device.Send(_note.ToString(), form);
+            await Device.Send("⚙️ Управление заметками", form);
         }
     }
 }

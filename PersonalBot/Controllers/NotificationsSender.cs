@@ -8,16 +8,16 @@ namespace PersonalBot.Controllers
     public class NotificationsSender
     {
         private Timer _notificationService;
-        private BotBase<StartForm> _bot;
+        private BotBase<Start> _bot;
         
-        public NotificationsSender(BotBase<StartForm> bot)
+        public NotificationsSender(BotBase<Start> bot)
         {
             _bot = bot;
         }
 
         public async void Notify(object state)
         {
-            var bot = state as BotBase<StartForm>;
+            var bot = state as BotBase<Start>;
 
             foreach (var @event in PersonalBot.Database.GetNotifyingEvents())
             {

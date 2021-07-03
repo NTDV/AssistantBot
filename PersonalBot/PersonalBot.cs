@@ -17,7 +17,7 @@ namespace PersonalBot
         private static PersonalBot _instanse;
         private static NotificationsSender _notificationsSender;
 
-        private BotBase<StartForm> _bot;
+        private BotBase<Start> _bot;
 
 
         private PersonalBot(ISettingsProvider settingsProvider)
@@ -46,7 +46,7 @@ namespace PersonalBot
             _notificationsSender?.Stop();
             _bot?.Stop();
             
-            _bot = new BotBase<StartForm>(Settings["api_token"]);
+            _bot = new BotBase<Start>(Settings["api_token"]);
             
             _notificationsSender = new NotificationsSender(_bot);
             _notificationsSender.Start();

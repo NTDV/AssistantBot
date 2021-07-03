@@ -7,11 +7,11 @@ using Telegram.Bot.Types;
 
 namespace PersonalBot.Controllers
 {
-    public class WeatherProvider
+    public class CurrentWeatherProvider
     {
         private readonly ISettingsProvider _settings;
 
-        public WeatherProvider(ISettingsProvider settingsProvider)
+        public CurrentWeatherProvider(ISettingsProvider settingsProvider)
         {
             _settings = settingsProvider;
         }

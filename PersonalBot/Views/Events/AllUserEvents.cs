@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using TelegramBotBase.Base;
 using TelegramBotBase.Form;
 
-namespace PersonalBot.Views.Notes
+namespace PersonalBot.Views.Events
 {
-    public class AllNotesForm : AutoCleanForm
+    public class AllUserEvents : AutoCleanForm
     {
         public override async Task Action(MessageResult message)
         {
@@ -16,14 +16,15 @@ namespace PersonalBot.Views.Notes
                 return;
 
             var query = call.Value.Split('-');
-            
+
             switch (query.FirstOrDefault())
             {
                 case "back":
-                    await NavigateTo(new NotesMenuForm());
+                    await NavigateTo(new EventsMenu());
                     break;
                 case "look":
-                    await NavigateTo(new NoteForm(PersonalBot.Database.GetNote(long.Parse(query.Last()))));
+                    var @event = await PersonalBot.Database.GetEvent(long.Parse(query.Last()));
+                    await NavigateTo(new ViewEvent(@event));
                     break;
                 default:
                     return;
@@ -32,19 +33,19 @@ namespace PersonalBot.Views.Notes
 
         public override async Task Render(MessageResult message)
         {
-            var notes = PersonalBot.Database.GetAllNotes(Device.DeviceId);
-            foreach (var note in notes)
+            var events = PersonalBot.Database.GetAllEvents(Device.DeviceId);
+            foreach (var @event in events)
             {
                 ButtonForm edit = new ButtonForm();
-                edit.AddButtonRow(new ButtonBase("⬆️ Подробнее", new CallbackData("a", $"look-{note.Id}").Serialize()));
-                
-                await Device.Send(note.Title, edit);
+                edit.AddButtonRow(new ButtonBase("⬆️ Подробнее", new CallbackData("a", $"look-{@event.Id}").Serialize()));
+
+                await Device.Send(@event.ToString(), edit);
             }
 
             var form = new ButtonForm();
             form.AddButtonRow(new ButtonBase("◀️ Назад", new CallbackData("a", "back").Serialize()));
 
-            await Device.Send($"📝 Всего заметок: {notes.Length}", form);
+            await Device.Send($"🕜 Всего напоминаний: {events.Length}", form);
         }
     }
 }

@@ -8,7 +8,7 @@ using TelegramBotBase.Form;
 
 namespace PersonalBot.Views.Notes
 {
-    public class NewNoteForm : AutoCleanForm
+    public class NewNote : AutoCleanForm
     {
         public Note Note => new()
             {ChatId = Device.DeviceId, Title = Title, Description = Description};
@@ -16,7 +16,7 @@ namespace PersonalBot.Views.Notes
         private string Title { get; set; }
         private string Description { get; set; }
 
-        public NewNoteForm()
+        public NewNote()
         {
             DeleteMode = eDeleteMode.OnLeavingForm;
         }
@@ -51,10 +51,10 @@ namespace PersonalBot.Views.Notes
             {
                 case "create":
                     await PersonalBot.Database.AddNoteAsync(Note);
-                    await NavigateTo(new NotesMenuForm());
+                    await NavigateTo(new NotesMenu());
                     break;
                 case "back":
-                    await NavigateTo(new NotesMenuForm());
+                    await NavigateTo(new NotesMenu());
                     break;
                 default:
                     return;
